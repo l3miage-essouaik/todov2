@@ -40,6 +40,8 @@ export class TodolistService {
           )
       ]
     } );
+    //console.log(JSON.stringify(this));
+    
     return this;
   }
 

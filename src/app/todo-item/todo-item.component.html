@@ -1,0 +1,24 @@
+<div class="view">
+    <input  class="toggle" 
+            type="checkbox" 
+            name="done"
+            [ngModel] = "data.isDone"
+            (ngModelChange) = "update.emit({isDone: $event})"
+            />
+    <label 
+        class="texte"
+        (dblclick) = "editing = true"
+        >
+        {{data.label}}
+    </label>
+    <button class="destroy" (click)="delete.emit(data)"></button>
+</div>
+<form (submit) = "update.emit({label: newTextInput.value})">
+    <input 
+        #newTextInput 
+        name="newTextInput" 
+        class="edit" 
+        [ngModel] = "data.label"
+        (blur) = "update.emit({label: newTextInput.value}); editing = false;"
+        />
+</form>

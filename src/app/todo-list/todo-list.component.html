@@ -1,0 +1,47 @@
+
+<section class="todoapp" *ngIf="obsState | async as S">
+  <header class="header">
+    <h1>{{S.label}}</h1>
+    <form (submit)="appendNexItem()">
+      <input  name        = "newTodoInput"
+              class       = "new-todo"
+              placeholder = "Que faire?"
+              autofocus 
+              [(ngModel)] = "newItemLabel"
+              />
+    </form>
+  </header>
+  <section class="main">
+    <input  class="toggle-all"
+            type="checkbox"
+            name="toggleAll"
+            [ngModel] = "S.allDone"
+    />
+    <label *ngIf="S.items.length > 0" for="toggleAll" (click)="updateItems(S.items, {isDone: !S.allDone})">Mark all as complete</label>
+    <ul class="todo-list">
+        <li *ngFor="let item of S.filteredItems"
+            [class.editing] = "compoItem.editing">
+            <app-todo-item #compoItem
+                [data]   = "item"
+                (update) = "updateItems([item], $event)"
+                (delete) = "delete([item])"
+                ></app-todo-item>
+        </li>
+    </ul>
+  </section>
+  <footer class="footer" *ngIf="S.items.length > 0">
+    <span class="todo-count"><strong>{{S.nbItemsLeft}}</strong> restantes</span>
+    <ul class="filters">
+      <li>
+        <a class="filterAll" [class.selected]="S.filter == fAll" (click)="bsFilter.next(fAll)">Tous</a>
+      </li>
+      <li>
+        <a class="filterActives" [class.selected]="S.filter == fActive" (click)="bsFilter.next(fActive)">Actifs</a>
+      </li>
+      <li>
+        <a class="filterCompleted" [class.selected]="S.filter == fCompleted" (click)="bsFilter.next(fCompleted)">Complétés</a>
+      </li>
+    </ul>
+    <button class="clear-completed" (click)="delete( S.items.filter( fCompleted ) )">Supprimer cochées</button>
+  </footer>
+</section>
